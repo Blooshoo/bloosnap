@@ -13,6 +13,16 @@ Brave/Chrome (Manifest V3) extension: full-page capture with a small built-in ed
 - Export PNG / JPG / PDF (A4, Letter, Legal; page breaks fall in whitespace), optional URL + date watermark, drag the image out of the tab.
 - Permissions: `activeTab`, `scripting` only.
 
+## Screenshots
+Captured with BlooSnap itself on a fake demo page.
+
+| | |
+|---|---|
+| **Full-page capture** — scroll, stitch, one image<br>![capture](docs/screenshots/capture.png) | **Annotate** — arrow, highlight, rect, text, emoji; select to move/resize<br>![annotate](docs/screenshots/annotate.png) |
+| **Redact** — black box and pixelate (flattened on export)<br>![redact](docs/screenshots/redact.png) | **Crop** — click Crop again to remove it<br>![crop](docs/screenshots/crop.png) |
+| **Emoji search**<br>![emoji picker](docs/screenshots/emoji-picker.png) | **PDF** with URL + date watermark<br>![pdf](docs/screenshots/pdf-watermark.png) |
+| **Mash worms** — family lore, 1 worm/sec<br>![mash worms](docs/screenshots/mash-worms.png) | |
+
 ## Layout
 | File | Role |
 |---|---|
@@ -25,7 +35,7 @@ Brave/Chrome (Manifest V3) extension: full-page capture with a small built-in ed
 
 ## Known gaps
 - Cross-origin iframes can't be scrolled (`activeTab` limit).
-- Scrollbars may appear in captures; PDF text isn't selectable.
+- PDF text isn't selectable (pages are images).
 - Crop can't be resized after drawing; no progress UI during export.
 - Only tested by hand; no automated tests.
 

@@ -17,7 +17,7 @@ function pageMeasure() {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
   const root = document.scrollingElement || document.documentElement;
-  const state = { docs: [document], fixed: [], el: root, startTop: root.scrollTop };
+  const state = { docs: [document], fixed: [], el: root, startTop: root.scrollTop, styles: [] };
   window.__bloosnap = state;
   const info = { dpr: window.devicePixelRatio, viewWidth: vw };
 
@@ -29,6 +29,14 @@ function pageMeasure() {
         frames.push(f);
       }
     } catch {} // cross-origin: can't reach inside
+  }
+
+  // Scrollbars would be captured in every frame; hide them while we work.
+  for (const d of state.docs) {
+    const st = d.createElement('style');
+    st.textContent = '* { scrollbar-width: none !important } *::-webkit-scrollbar { display: none !important }';
+    (d.head || d.documentElement).append(st);
+    state.styles.push(st);
   }
 
   if (root.scrollHeight > vh * 1.05) {
@@ -99,6 +107,7 @@ function pageRestore() {
   const s = window.__bloosnap;
   if (!s) return;
   for (const f of s.fixed) f.e.style.visibility = f.orig;
+  for (const st of s.styles) st.remove();
   s.el.scrollTo({ top: s.startTop, left: 0, behavior: 'instant' });
   delete window.__bloosnap;
 }
