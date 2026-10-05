@@ -656,3 +656,45 @@ $('emoji-btn').textContent = `Emoji ${curEmoji}`;
 setTool('rect');
 layout();
 render();
+
+// --- MASH WORMS (family lore) ---
+const mashBtn = $('mash');
+const wormLayer = document.body.appendChild(Object.assign(document.createElement('div'), { id: 'worms' }));
+let wormTimer = null;
+let mashed = 0;
+
+function spawnWorm() {
+  const w = document.createElement('div');
+  w.className = 'worm';
+  w.textContent = '🪱';
+  w.style.left = `${Math.random() * (innerWidth - 60)}px`;
+  w.style.top = `${60 + Math.random() * (innerHeight - 120)}px`;
+  w.addEventListener('pointerdown', () => {
+    if (w.classList.contains('squished')) return;
+    w.classList.add('squished');
+    const m = document.createElement('div');
+    m.className = 'mash';
+    m.textContent = '*mash*';
+    m.style.left = w.style.left;
+    m.style.top = w.style.top;
+    wormLayer.append(m);
+    setTimeout(() => m.remove(), 900);
+    mashBtn.textContent = `🪱 Mashed: ${++mashed}`;
+  });
+  wormLayer.append(w);
+  setTimeout(() => {
+    w.style.opacity = 0;
+    setTimeout(() => w.remove(), 600);
+  }, 6000);
+}
+
+mashBtn.onclick = () => {
+  const on = !wormTimer;
+  clearInterval(wormTimer);
+  wormTimer = on ? setInterval(spawnWorm, 1000) : null;
+  mashBtn.classList.toggle('active', on);
+  if (!on) {
+    wormLayer.replaceChildren();
+    mashBtn.textContent = mashed ? `🪱 Mashed: ${mashed}` : '🪱 Mash worms';
+  } else spawnWorm();
+};

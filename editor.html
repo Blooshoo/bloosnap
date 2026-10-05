@@ -23,6 +23,15 @@
   #dragwrap { display: flex; align-items: center; gap: 6px; padding: 2px 8px 2px 2px; border: 1px dashed #666;
               border-radius: 4px; cursor: grab; }
   #dragout { width: 26px; height: 26px; object-fit: cover; background: #fff; border-radius: 2px; }
+  #worms { position: fixed; inset: 0; pointer-events: none; z-index: 30; overflow: hidden; }
+  .worm { position: absolute; font-size: 36px; cursor: pointer; pointer-events: auto; user-select: none;
+          animation: wiggle 0.6s ease-in-out infinite alternate, fadein 0.3s; transition: opacity 0.6s; }
+  .worm.squished { animation: none; transform: scale(1.4, 0.2); pointer-events: none; transition: transform 0.08s, opacity 0.8s; opacity: 0; }
+  .mash { position: absolute; font: italic bold 22px system-ui; color: #ff5; text-shadow: 0 0 4px #000, 0 2px 0 #000;
+          pointer-events: none; animation: rise 0.8s ease-out forwards; }
+  @keyframes wiggle { from { transform: rotate(-18deg) scaleX(0.9); } to { transform: rotate(18deg) scaleX(1.1); } }
+  @keyframes fadein { from { opacity: 0; } }
+  @keyframes rise { to { transform: translateY(-40px); opacity: 0; } }
   .sep { width: 1px; height: 22px; background: #444; margin: 0 4px; }
   #info { flex-basis: 100%; font-size: 12px; color: #999; white-space: nowrap; overflow: hidden;
           text-overflow: ellipsis; }
@@ -61,6 +70,7 @@
   <button id="export-pdf">Export PDF</button>
   <label title="Add source URL + capture date"><input type="checkbox" id="wm"> Watermark</label>
   <span id="dragwrap" title="Drag the finished image to your desktop or another app"><img id="dragout" draggable="true" alt="">Drag out</span>
+  <button id="mash" title="MASH WORMS">🪱 Mash worms</button>
   <div id="info">Loading…</div>
 </header>
 <main><div id="stage"><svg id="overlay"></svg></div></main>

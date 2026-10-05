@@ -186,5 +186,12 @@ chrome.action.onClicked.addListener(async (tab) => {
     await chrome.tabs.create({ url: chrome.runtime.getURL(`editor.html?id=${id}`) });
   } catch (err) {
     console.error('BlooSnap capture failed', err);
+    chrome.action.setBadgeBackgroundColor({ tabId: tab.id, color: '#d33' });
+    chrome.action.setBadgeText({ tabId: tab.id, text: 'ERR' });
+    chrome.action.setTitle({ tabId: tab.id, title: `BlooSnap failed: ${err.message}` });
+    setTimeout(() => {
+      chrome.action.setBadgeText({ tabId: tab.id, text: '' });
+      chrome.action.setTitle({ tabId: tab.id, title: 'BlooSnap: capture full page' });
+    }, 10_000);
   }
 });
