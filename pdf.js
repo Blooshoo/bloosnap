@@ -41,14 +41,20 @@ export function buildPdf(pages, footer, paper) {
   const cw = paper.w - 2 * MARGIN;
   pages.forEach((p, i) => {
     const img = 4 + 3 * i;
-    const dw = cw;
-    const dh = (p.h / p.w) * cw;
+    let dw = cw;
+    let dh = (p.h / p.w) * cw;
+    const maxH = paper.h - 2 * MARGIN - (footer ? FOOTER_H : 0);
+    if (dh > maxH) {
+      dw *= maxH / dh; // slightly long last page: shrink to fit
+      dh = maxH;
+    }
+    const x = MARGIN + (cw - dw) / 2;
     obj(
       img,
       `<< /Type /XObject /Subtype /Image /Width ${p.w} /Height ${p.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.jpeg.length} >>`,
       p.jpeg
     );
-    let content = `q ${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${MARGIN} ${(paper.h - MARGIN - dh).toFixed(2)} cm /Im0 Do Q`;
+    let content = `q ${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${x.toFixed(2)} ${(paper.h - MARGIN - dh).toFixed(2)} cm /Im0 Do Q`;
     if (footer) content += `\nBT /F1 7 Tf ${MARGIN} 14 Td (${pdfText(footer)}) Tj ET`;
     obj(img + 1, `<< /Length ${content.length} >>`, enc.encode(content));
     obj(

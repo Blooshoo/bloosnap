@@ -1,11 +1,15 @@
 # BlooSnap
 
-Brave/Chrome (Manifest V3) extension: full-page capture with a small built-in editor.
+Brave / Chrome / Firefox (Manifest V3) extension: full-page capture with a small built-in editor.
 
 ## Install (unpacked)
 1. Open `brave://extensions` (or `chrome://extensions`), enable Developer mode.
 2. Load unpacked → pick this folder.
 3. Click the toolbar icon or press **Alt+Shift+S** (rebind at `brave://extensions/shortcuts`).
+
+**Firefox (140+):** open `about:debugging#/runtime/this-firefox` → *Load Temporary Add-on* → pick `manifest.json`
+(lasts until Firefox restarts; a permanent install needs signing through addons.mozilla.org). In Firefox, shortcuts
+are managed at `about:addons` → ⚙ → *Manage Extension Shortcuts*. The drag-image-out chip is Chrome-only and is hidden there.
 
 ## What it does
 - Scroll-and-stitch capture; handles sticky/fixed bars, lazy-loaded content, inner scrollers and same-origin iframes. Oversized pages split into tiles (canvas limit).
@@ -32,6 +36,7 @@ Captured with BlooSnap itself on a fake demo page.
 | `pdf.js` | Dependency-free PDF writer (one JPEG per page) |
 | `emoji-data.js` | Generated emoji search list (Unicode names + aliases) |
 | `bloosnap.md` | Original feature wishlist |
+| `tools/firefox-smoke/` | Headless Firefox smoke test: capture, draw, export PNG/PDF, with assertions |
 | `tools/screenshots/` | Regenerates `docs/screenshots` by driving the real extension in headless Brave (see below) |
 
 ## Known gaps
@@ -46,6 +51,12 @@ pip install websockets          # plus poppler (pdftoppm) and Brave/Chromium
 python3 tools/screenshots/run.py [--out DIR] [--brave "flatpak run com.brave.Browser"]
 ```
 It copies the extension to a temp dir, serves a fake demo page, runs the extension's real capture code against it, then scripts the editor and writes the PNGs. It picks free ports, uses a throwaway profile, cleans up after itself, and aborts if headless Brave serves stale frames.
+
+## Tests
+```
+python3 tools/firefox-smoke/run.py     # needs Firefox 140+, `websockets`, poppler
+```
+There's no automated test for Brave/Chrome beyond the screenshot run above, which fails if capture or export breaks.
 
 ## Package
 `./package.sh` → `dist/bloosnap-<version>.zip`

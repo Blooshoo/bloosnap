@@ -347,7 +347,9 @@ async function exportPdf() {
   const pages = [];
   for (let y = 0; y < c.h; ) {
     let end = Math.min(c.h, y + sliceH);
-    if (end < c.h) end = findBreak(c, y, end);
+    // Don't strand a sliver on its own page: the last page may run up to 15% long (the PDF shrinks it to fit).
+    if (c.h - y <= sliceH * 1.15) end = c.h;
+    else if (end < c.h) end = findBreak(c, y, end);
     const cv = renderRegion(c, y, end - y, 0, '#fff');
     const jpeg = new Uint8Array(await (await toBlob(cv, 'image/jpeg')).arrayBuffer());
     pages.push({ jpeg, w: cv.width, h: cv.height });
@@ -546,6 +548,8 @@ document.querySelectorAll('[data-tool]').forEach((btn) =>
 for (const name of Object.keys(PAPERS)) $('paper').add(new Option(name, name));
 
 // --- drag the finished image out of the tab ---
+// (relies on Chrome's DownloadURL drag type; hide it where that isn't supported)
+if (navigator.userAgent.includes('Firefox')) $('dragwrap').hidden = true;
 const dragImg = $('dragout');
 let dragKey = '';
 let dragReady = false;
