@@ -49,3 +49,6 @@ It copies the extension to a temp dir, serves a fake demo page, runs the extensi
 
 ## Package
 `./package.sh` → `dist/bloosnap-<version>.zip`
+
+## License
+MIT — free for anyone to use, modify, and share. See [LICENSE](LICENSE).
