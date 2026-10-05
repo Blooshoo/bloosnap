@@ -32,12 +32,20 @@ Captured with BlooSnap itself on a fake demo page.
 | `pdf.js` | Dependency-free PDF writer (one JPEG per page) |
 | `emoji-data.js` | Generated emoji search list (Unicode names + aliases) |
 | `bloosnap.md` | Original feature wishlist |
+| `tools/screenshots/` | Regenerates `docs/screenshots` by driving the real extension in headless Brave (see below) |
 
 ## Known gaps
 - Cross-origin iframes can't be scrolled (`activeTab` limit).
 - PDF text isn't selectable (pages are images).
 - Crop can't be resized after drawing; no progress UI during export.
 - Only tested by hand; no automated tests.
+
+## Regenerate the screenshots
+```
+pip install websockets          # plus poppler (pdftoppm) and Brave/Chromium
+python3 tools/screenshots/run.py [--out DIR] [--brave "flatpak run com.brave.Browser"]
+```
+It copies the extension to a temp dir, serves a fake demo page, runs the extension's real capture code against it, then scripts the editor and writes the PNGs. It picks free ports, uses a throwaway profile, cleans up after itself, and aborts if headless Brave serves stale frames.
 
 ## Package
 `./package.sh` → `dist/bloosnap-<version>.zip`
