@@ -1,0 +1,67 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>BlooSnap</title>
+<style>
+  body { margin: 0; background: #222; color: #ddd; font: 14px system-ui; }
+  header { position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: 6px;
+           align-items: center; padding: 8px 12px; background: #111; }
+  header button { background: #333; color: #ddd; border: 1px solid #555; border-radius: 4px;
+                  padding: 4px 10px; cursor: pointer; }
+  header button:hover { background: #444; }
+  header button.active { background: #2d6cdf; border-color: #2d6cdf; color: #fff; }
+  header input[type=color] { width: 32px; height: 26px; padding: 0; border: 0; background: none; }
+  header label { display: flex; align-items: center; gap: 4px; }
+  header select { background: #333; color: #ddd; border: 1px solid #555; border-radius: 4px; }
+  #emoji-wrap { position: relative; }
+  #emoji-panel { position: absolute; top: 100%; left: 0; margin-top: 6px; z-index: 20; width: 300px;
+                 background: #1a1a1a; border: 1px solid #555; border-radius: 6px; padding: 8px; }
+  #emoji-q { width: 100%; box-sizing: border-box; padding: 4px 6px; background: #333; color: #ddd;
+             border: 1px solid #555; border-radius: 4px; }
+  #emoji-grid { display: flex; flex-wrap: wrap; gap: 2px; margin-top: 6px; max-height: 200px; overflow-y: auto; }
+  #emoji-grid button { background: none; border: 0; font-size: 22px; padding: 2px 4px; cursor: pointer; }
+  #emoji-grid button:hover { background: #444; }
+  #dragwrap { display: flex; align-items: center; gap: 6px; padding: 2px 8px 2px 2px; border: 1px dashed #666;
+              border-radius: 4px; cursor: grab; }
+  #dragout { width: 26px; height: 26px; object-fit: cover; background: #fff; border-radius: 2px; }
+  .sep { width: 1px; height: 22px; background: #444; margin: 0 4px; }
+  #info { flex-basis: 100%; font-size: 12px; color: #999; white-space: nowrap; overflow: hidden;
+          text-overflow: ellipsis; }
+  main { padding: 16px; }
+  #stage { position: relative; margin: 0 auto; background: #fff; }
+  #stage img { position: absolute; left: 0; display: block; }
+  #overlay { position: absolute; left: 0; top: 0; cursor: crosshair; touch-action: none; }
+</style>
+<header>
+  <button data-tool="select">Select</button>
+  <span class="sep"></span>
+  <button data-tool="crop">Crop</button>
+  <button data-tool="black">Redact</button>
+  <button data-tool="pixel">Pixelate</button>
+  <span class="sep"></span>
+  <button data-tool="rect">Rect</button>
+  <button data-tool="arrow">Arrow</button>
+  <button data-tool="highlight">Highlight</button>
+  <button data-tool="text">Text</button>
+  <span id="emoji-wrap">
+    <button data-tool="emoji" id="emoji-btn">Emoji</button>
+    <div id="emoji-panel" hidden>
+      <input id="emoji-q" type="search" placeholder="Search emoji (e.g. heart, fire, arrow)…" autocomplete="off">
+      <div id="emoji-grid"></div>
+    </div>
+  </span>
+  <select id="font" title="Text font"></select>
+  <input type="color" id="color" value="#ff2d2d" title="Color">
+  <span class="sep"></span>
+  <button id="undo">Undo</button>
+  <button id="reset-crop">Reset crop</button>
+  <span class="sep"></span>
+  <button id="export-png">Export PNG</button>
+  <button id="export-jpeg">Export JPG</button>
+  <select id="paper" title="PDF paper size"></select>
+  <button id="export-pdf">Export PDF</button>
+  <label title="Add source URL + capture date"><input type="checkbox" id="wm"> Watermark</label>
+  <span id="dragwrap" title="Drag the finished image to your desktop or another app"><img id="dragout" draggable="true" alt="">Drag out</span>
+  <div id="info">Loading…</div>
+</header>
+<main><div id="stage"><svg id="overlay"></svg></div></main>
+<script type="module" src="editor.js"></script>
