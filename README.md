@@ -52,3 +52,6 @@ It copies the extension to a temp dir, serves a fake demo page, runs the extensi
 
 ## License
 MIT — free for anyone to use, modify, and share. See [LICENSE](LICENSE).
+
+---
+A thing by [blooshoo.com](https://blooshoo.com)
