@@ -139,7 +139,15 @@ function handlesOf(s) {
 }
 
 // --- SVG rendering (editor view) ---
-const esc = (t) => t.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
+// strip control chars XML can't hold, then escape
+const esc = (t) =>
+  t.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
+
+// Build SVG nodes from our own markup with the XML parser (no innerHTML).
+function svgNodes(markup) {
+  const doc = new DOMParser().parseFromString(`<svg xmlns="http://www.w3.org/2000/svg">${markup}</svg>`, 'image/svg+xml');
+  return [...doc.documentElement.childNodes].map((n) => document.importNode(n, true));
+}
 
 function svgShape(s) {
   switch (s.type) {
@@ -180,11 +188,14 @@ function selectionSvg() {
 
 function render() {
   const cropShown = draft?.type === 'crop' ? draft : crop && { type: 'crop', ...crop };
-  svg.innerHTML =
-    shapes.map(svgShape).join('') +
-    (draft && draft.type !== 'crop' ? svgShape(draft) : '') +
-    (cropShown ? svgShape({ ...cropShown, type: 'crop' }) : '') +
-    selectionSvg();
+  svg.replaceChildren(
+    ...svgNodes(
+      shapes.map(svgShape).join('') +
+        (draft && draft.type !== 'crop' ? svgShape(draft) : '') +
+        (cropShown ? svgShape({ ...cropShown, type: 'crop' }) : '') +
+        selectionSvg()
+    )
+  );
   svg.style.cursor = tool === 'select' ? 'default' : 'crosshair';
 }
 
