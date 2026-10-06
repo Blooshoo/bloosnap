@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "BlooSnap",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Full-page capture with a simple built-in editor.",
   "permissions": [
     "activeTab",
