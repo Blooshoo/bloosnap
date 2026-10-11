@@ -5,7 +5,7 @@ Brave / Chrome / Firefox (Manifest V3) extension: full-page capture with a small
 ## Install (unpacked)
 1. Open `brave://extensions` (or `chrome://extensions`), enable Developer mode.
 2. Load unpacked → pick this folder.
-3. Click the toolbar icon or press **Alt+Shift+S** (rebind at `brave://extensions/shortcuts`).
+3. Click the toolbar icon or press **Alt+Shift+Z** (rebind at `brave://extensions/shortcuts`).
 
 **Firefox (140+):** open `about:debugging#/runtime/this-firefox` → *Load Temporary Add-on* → pick `manifest.json`
 (lasts until Firefox restarts; a permanent install needs signing through addons.mozilla.org). In Firefox, shortcuts
